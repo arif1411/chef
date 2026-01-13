@@ -1,0 +1,19 @@
+# Chef generated
+nodes/
+clients/
+.local/
+.cache/
+
+# Test Kitchen / Dokken
+.kitchen/
+.kitchen.yml.lock
+.dokken/
+
+# Chef cache
+.cache/
+*.lock.json
+
+# OS / editor
+*.log
+*.swp
+.DS_Store

@@ -1,0 +1,8 @@
+---
+id: infra-client
+name: Chef Infra Client
+date_accepted: '2022-08-15T16:09:55+00:00'
+accepting_product: chef-workstation
+accepting_product_version: latest
+user: chef
+file_format: 1

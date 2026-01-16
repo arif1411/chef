@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Welcome to <%= node['company_web']['company_name'] %></h1>
+
+    <h2>Platform: <%= node['platform'] %></h2>
+    <h2>Hostname: <%= node['hostname'] %></h2>
+    <h2>Total Memory: <%= node['memory']['total'] %></h2>
+    <h2>CPU Speed (MHz): <%= node['cpu']['0']['mhz'] %></h2>
+  </body>
+</html>

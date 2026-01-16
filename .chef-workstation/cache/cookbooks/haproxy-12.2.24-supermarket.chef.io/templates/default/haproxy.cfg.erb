@@ -1,0 +1,462 @@
+<% unless nil_or_empty?(@global) %>
+global
+  user <%= @global['user'] %>
+  group <%= @global['group'] %>
+<% if @global['pid_file'] -%>
+  pidfile <%= @global['pid_file'] %>
+<% end %>
+<% if @global['log'] && @global['log'].is_a?(Array)-%>
+<% @global['log'].each do | logvar | -%>
+<% if logvar && logvar.is_a?(Array)-%>
+<% logvar.each  do | log | -%>
+  log <%= log %>
+<% end -%>
+<% else -%>
+  log <%= logvar %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% if @global['log_tag'] -%>
+  log-tag <%= @global['log_tag'] %>
+<% end -%>
+<% if @global['chroot'] -%>
+  chroot <%= @global['chroot'] %>
+<% end -%>
+<% if @global['daemon'].eql? 'true' -%>
+  daemon
+<% end -%>
+  <%= @global['debug_option'] %>
+<% @global['stats']&.each do |option, value| -%>
+  stats <%= option %> <%= value %>
+<% end -%>
+<% unless nil_or_empty?(@global['maxconn']) -%>
+  maxconn <%= @global['maxconn'] %>
+<% end -%>
+<% if @global['pidfile'] -%>
+  pidfile <%= @global['pidfile'] %>
+<% end -%>
+<% unless nil_or_empty?(@global['tuning']) %>
+<% @global['tuning'].each do | option, value | -%>
+  tune.<%= option %> <%= value %>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(@global['extra_options']) -%>
+<% @global['extra_options'].each do | option, value | -%>
+<% if value.is_a?(Array) %>
+<% value.each do | array_element | %>
+  <%= option %> <%= array_element %>
+<% end -%>
+<% else %>
+  <%= option %> <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(@resolvers) %>
+<% @resolvers.each do |resolver, r | %>
+
+
+resolvers <%= resolver %>
+<% unless nil_or_empty?(r['nameserver']) %>
+<% r['nameserver'].each do | s |%>
+<% s.each  do |nameserver|%>
+  nameserver <%= nameserver %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% r['extra_options'].each do | option, value | -%>
+<% if value.is_a?(Array) %>
+<% value.each do | array_element | %>
+  <%= option %> <%= array_element %>
+<% end -%>
+<% else %>
+  <%= option %> <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(@defaults) %>
+
+
+defaults
+<% @defaults['timeout'].each do | key, timeout | -%>
+  timeout <%= key %> <%= timeout %>
+<% end -%>
+  log <%= @defaults['log'] %>
+  mode <%= @defaults['mode'] %>
+<% unless nil_or_empty?(@defaults['balance']) -%>
+  balance <%= @defaults['balance'] %>
+<% end -%>
+<% if @defaults['hash_type'] -%>
+  hash-type <%= @defaults['hash_type'] %>
+<% end -%>
+<% @defaults['option'].each do | option | -%>
+  option <%= option %>
+<% end -%>
+<% unless nil_or_empty?(@defaults['maxconn']) -%>
+  maxconn <%= @defaults['maxconn'] %>
+<% end -%>
+<% unless nil_or_empty?(@defaults['retries']) -%>
+  retries <%= @defaults['retries'] %>
+<% end -%>
+<% @defaults['stats']&.each do |option, value| -%>
+  stats <%= option %> <%= value %>
+<% end -%>
+<% unless nil_or_empty?(@defaults['extra_options']) %>
+<% @defaults['extra_options'].each do | option, value | -%>
+<% if value.is_a?(Array) %>
+<% value.each do | array_element | %>
+  <%= option %> <%= array_element %>
+<% end -%>
+<% else %>
+  <%= option %> <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(@cache) %>
+<% @cache.each do |cache, c | %>
+
+
+cache <%= cache %>
+<% unless nil_or_empty?(c['total_max_size']) -%>
+  total-max-size <%= c['total_max_size'] %>
+<% end -%>
+<% unless nil_or_empty?(c['max_object_size']) %>
+  max-object-size <%= c['max_object_size'] %>
+<% end -%>
+<% unless nil_or_empty?(c['max_age']) %>
+  max-age <%= c['max_age'] %>
+<% end -%>
+<% end # cache loop -%>
+<% end # cache -%>
+<% unless nil_or_empty?(@userlist) %>
+<% @userlist.each do |userlist, u| %>
+
+
+userlist <%= userlist %>
+<% u.each do |type,i| -%>
+<% i.each do |item| -%>
+<% item.each do |k,v| %>
+  <%= type %> <%=k%> <%= v %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(@peer) %>
+<% @peer.each do |peer, pv | %>
+
+peers <%= peer %>
+<% if pv['bind'].is_a?(Hash) -%>
+<% pv['bind'].each do |k, v| -%>
+  bind <%= "#{k} #{v}".strip %>
+<% end -%>
+<% else -%>
+  bind <%= pv['bind'] %>
+<% end -%>
+<% unless nil_or_empty?(pv['state']) %>
+  <%= pv['state'] %>
+<% end -%>
+<% unless nil_or_empty?(pv['server']) %>
+<% pv['server'].each do | s |%>
+<% s.each  do |server|%>
+  server <%= server %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(pv['default_bind']) %>
+  default-bind <%= pv['default_bind'] %>
+<% end -%>
+<% unless nil_or_empty?(pv['default_server']) %>
+  default-server <%= pv['default_server'] %>
+<% end -%>
+<% unless nil_or_empty?(pv['table']) %>
+<% pv['table'].each do | t |%>
+<% t.each  do |table|%>
+  table <%= table %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(pv['extra_options']) %>
+<% pv['extra_options'].each do | key, value |%>
+<% if value.is_a?(Array) %>
+<% value.each do | array_element | %>
+  <%= key %> <%= array_element %>
+<% end -%>
+<% else %>
+  <%= key %> <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end # peers loop -%>
+<% end # peers -%>
+<% unless nil_or_empty?(@mailer) %>
+<% @mailer.each do |mailer, m | %>
+
+mailers <%= mailer %>
+<% unless nil_or_empty?(m['mailer']) -%>
+<% m['mailer'].each do |mail| -%>
+  mailer <%= mail %>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(m['timeout']) %>
+  timeout mail <%= m['timeout'] %>
+<% end -%>
+<% end # mailers loop -%>
+<% end # mailers -%>
+<% unless nil_or_empty?(@fastcgi) %>
+<% @fastcgi.each do |fastcgi, f | %>
+
+
+fcgi-app <%= fastcgi %>
+<% unless nil_or_empty?(f['docroot']) %>
+  docroot <%= f['docroot'] %>
+<% end -%>
+<% unless nil_or_empty?(f['index']) %>
+  index <%= f['index'] %>
+<% end -%>
+<% unless nil_or_empty?(f['log_stderr']) %>
+  log-stderr <%= f['log_stderr'] %>
+<% end -%>
+<% unless nil_or_empty?(f['option']) %>
+<% f['option'].each do | option |%>
+<% option.each do | option | %>
+  option <%= option %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(f['extra_options']) %>
+<% f['extra_options'].each do | key, value | %>
+<% unless key == 'http-request' %>
+<% if value.is_a?(Array) %>
+<% value.each do | array_element | %>
+  <%= key %> <%= array_element %>
+<% end -%>
+<% else %>
+  <%= key %> <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end # fastcgi loop -%>
+<% end # fastcgi -%>
+<% unless nil_or_empty?(@frontend) %>
+<% @frontend.each do |frontend, f | %>
+
+
+frontend <%= frontend %>
+<% unless nil_or_empty?(f['mode']) -%>
+  mode <%= f['mode'] %>
+<% end -%>
+<% unless nil_or_empty?(f['default_backend']) %>
+  default_backend <%= f['default_backend'] %>
+<% end -%>
+<% f['bind'].each do |binding| -%>
+  bind <%= binding %>
+<% end -%>
+<% unless nil_or_empty?(f['maxconn']) -%>
+  maxconn <%= f['maxconn'] %>
+<% end -%>
+<% f['stats']&.each do |option, value| -%>
+  stats <%= option %> <%= value %>
+<% end -%>
+<% unless nil_or_empty?(f['acl']) %>
+<% f['acl'].flatten.uniq.each do | acl |%>
+  acl <%= acl %>
+<% end -%>
+<% end -%>
+<% if f['reqrep'] -%>
+<% f['reqrep'].each do |reqrep| %>
+  reqrep <%= reqrep %>
+<% end -%>
+<% end %>
+<% if f['reqirep'] -%>
+<% f['reqirep'].each do |reqirep| %>
+  reqirep <%= reqirep %>
+<% end -%>
+<% end %>
+<% unless nil_or_empty?(f['extra_options']) %>
+<% f['extra_options'].each do | key, value | %>
+<% if key == 'http-request' %>
+<% if value.is_a?(Array) %>
+<% value.each do | array_element | %>
+  <%= key %> <%= array_element %>
+<% end -%>
+<% else %>
+  <%= key %> <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(f['use_backend']) %>
+<% f['use_backend'].flatten.uniq.each do | backend |%>
+  use_backend <%= backend %>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(f['option']) %>
+<% f['option'].each do | option |%>
+<% option.each do | option | %>
+  option <%= option %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(f['extra_options']) %>
+<% f['extra_options'].each do | key, value | %>
+<% unless key == 'http-request' %>
+<% if value.is_a?(Array) %>
+<% value.each do | array_element | %>
+  <%= key %> <%= array_element %>
+<% end -%>
+<% else %>
+  <%= key %> <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end # frontend loop -%>
+<% end # frontend -%>
+<% unless nil_or_empty?(@backend) %>
+<% @backend.each do | key, backend | %>
+
+
+backend <%= key %>
+<% unless nil_or_empty?(backend['mode']) -%>
+  mode <%= backend['mode'] %>
+<% end -%>
+<% unless nil_or_empty?(backend['server']) %>
+<% backend['server'].each do | s |%>
+<% s.each  do |server|%>
+  server <%= server %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(backend['acl']) %>
+<% backend['acl'].flatten.uniq.each do | acl |%>
+  acl <%= acl %>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(backend['option']) %>
+<% backend['option'].each do | option |%>
+<% option.each do | option | %>
+  option <%= option %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(backend['tcp_request']) %>
+<% backend['tcp_request'].each do | tcp_request |%>
+<% tcp_request.each do | tcp_request | %>
+  tcp-request <%= tcp_request %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% if backend['hash_type'] -%>
+  hash-type <%= backend['hash_type'] %>
+<% end -%>
+<% if backend['reqrep'] -%>
+<% backend['reqrep'].each do |reqrep| %>
+  reqrep <%= reqrep %>
+<% end -%>
+<% end %>
+<% if backend['reqirep'] -%>
+<% backend['reqirep'].each do |reqirep| %>
+  reqirep <%= reqirep %>
+<% end -%>
+<% end %>
+<% unless nil_or_empty?(backend['extra_options']) %>
+<% backend['extra_options'].each do | key, value |%>
+<% if value.is_a?(Array) %>
+<% value.each do | array_element | %>
+  <%= key %> <%= array_element %>
+<% end -%>
+<% else %>
+  <%= key %> <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end # backend loop -%>
+<% end # backend -%>
+<% unless nil_or_empty?(@listen) %>
+<% @listen.each do | key, listen |%>
+
+
+listen <%= key %>
+<% unless nil_or_empty?(listen['mode']) -%>
+  mode <%= listen['mode']%>
+<% end -%>
+<% listen['bind'].each do |binding| -%>
+  bind <%= binding %>
+<% end -%>
+<% unless nil_or_empty?(listen['maxconn']) -%>
+  maxconn <%= listen['maxconn']%>
+<% end -%>
+<% listen['stats']&.each do |option, value| -%>
+  stats <%= option %> <%= value %>
+<% end -%>
+<% unless nil_or_empty?(listen['acl']) %>
+<% listen['acl'].flatten.uniq.each do | acl |%>
+  acl <%= acl %>
+<% end -%>
+<% end -%>
+<% if listen['http_request'] -%>
+<% listen['http_request'].each do |http_request| %>
+  http-request <%= http_request %>
+<% end -%>
+<% end %>
+<% if listen['http_response'] -%>
+  http-response <%= listen['http_response'] %>
+<% end %>
+<% if listen['reqrep'] -%>
+<% listen['reqrep'].each do |reqrep| %>
+  reqrep <%= reqrep %>
+<% end -%>
+<% end %>
+<% if listen['reqirep'] -%>
+<% listen['reqirep'].each do |reqirep| %>
+  reqirep <%= reqirep %>
+<% end -%>
+<% end %>
+<% if listen['default_backend'] -%>
+  default_backend <%= listen['default_backend'] %>
+<% end %>
+<% unless nil_or_empty?(listen['extra_options']) %>
+<% listen['extra_options'].each do | key, value | %>
+<% if key == 'http-request' %>
+<% if value.is_a?(Array) %>
+<% value.each do | array_element | %>
+  <%= key %> <%= array_element %>
+<% end -%>
+<% else %>
+  <%= key %> <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(listen['use_backend']) %>
+<% listen['use_backend'].flatten.uniq.each do | backend |%>
+  use_backend <%= backend %>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(listen['extra_options']) %>
+<% listen['extra_options'].each do | key, value | %>
+<% unless key == 'http-request' %>
+<% if value.is_a?(Array) %>
+<% value.each do | array_element | %>
+  <%= key %> <%= array_element %>
+<% end -%>
+<% else %>
+  <%= key %> <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% listen['server']&.each do | s |%>
+<% s.each  do |server|%>
+  server <%= server %>
+<% end -%>
+<% end -%>
+<% if listen['hash_type'] -%>
+  hash-type <%= listen['hash_type'] %>
+<% end -%>
+<% end # listen loop -%>
+<% end # listen -%>
